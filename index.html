@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <title>Vue.js Test</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+
+  <div id="app" v-cloak class="container">
+    <h1>
+      <button @click="purge" class="purge">一括削除</button>
+      My Todos
+      <ul>
+        <li>未対応:{{ remaining.length - running.length }}</li>
+        <li>対応中:{{ running.length }}</li>
+        <li>完了:{{ todos.length - remaining.length }}</li>
+        <li class="total-info">合計:{{ todos.length }}</li>
+      </ul>
+    </h1>
+
+    <form class="add-form">
+      <input type="text" class="form" placeholder="Todo名 ※必須" v-model="newTodo">
+      <input type="date" class="form" v-model="newDeadLine">
+      <button @click.prevent="addTodo()">追加</button>
+    </form>
+
+    <p v-show="errors.length">
+    <ul>
+      <li class="error" v-for="error in errors">{{ error }}</li>
+    </ul>
+    </p>
+
+    <ul>
+      <li v-for="(todo, index) in todos">
+        <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
+        <span class="deadline-info" :class="{'done':todo.status === 'done'}">
+          <span class="deadline-txt" :class="{'done':todo.status === 'done'}">期限</span>
+          【{{ todo.deadLine }}】</span>
+        <select name="status" v-model="todo.status">
+          <option value="isDone">未対応</option>
+          <option value="running">対応中</option>
+          <option value="done">完了</option>
+        </select>
+        <button @click="deleteTodo(index)">削除</button>
+      </li>
+      <li v-show="!this.todos.length">nothing!</li>
+    </ul>
+
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>
