@@ -1,58 +1,131 @@
 <!DOCTYPE html>
-<html lang="ja">
-
+<html>
 <head>
   <meta charset="utf-8">
   <title>Vue.js TodoList</title>
   <link rel="stylesheet" href="css/styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.5.55/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.3.10/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
-
 <body>
+  <div id="app" v-cloak>
+    <v-app>
+      <v-app-bar color="primary" dark app clipped-left>
+        <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
+        <v-toolbar-title>My Todo List</v-toolbar-title>
+        
+        <!-- タイトルとボタンの間隔を空ける -->
+        <v-spacer></v-spacer>
 
-  <div id="app" v-cloak class="container">
-    <h1>
-      <button @click="purge" class="purge">一括削除</button>
-      My Todos
-      <ul>
-        <li>未対応:{{ remaining.length - running.length }}</li>
-        <li>対応中:{{ running.length }}</li>
-        <li>完了:{{ todos.length - remaining.length }}</li>
-        <li class="total-info">合計:{{ todos.length }}</li>
-      </ul>
-    </h1>
+          <v-btn text @click="showModal">新規作成</v-btn>
+          <v-btn text @click="purge" class="purge">一括削除</v-btn>              
+          <v-btn text>ログアウト</v-btn>
+    
+      </v-app-bar>
+      
+      
+      <v-main class="container">
+          <v-container  fluid>
+            <h1>
+              My Todos
+              <v-row> 
+                <v-col cols="1" class="status-info">未対応:{{ remaining.length - running.length }}</v-col>
+                <v-col cols="1" class="status-info">対応中:{{ running.length }}</v-col>
+                <v-col cols="1" class="status-info">完了:{{ todos.length - remaining.length }}</v-col>
+                <v-col cols="1" class="total-info">合計:{{ todos.length }}</v-col>  
+              </v-row> 
+            </h1>
+          </v-container> 
 
-    <form class="add-form">
-      <input type="text" class="form" placeholder="Todo名 ※必須" v-model="newTodo">
-      <input type="date" class="form" v-model="newDeadLine">
-      <button @click.prevent="addTodo()">追加</button>
-    </form>
+          <p v-show="errors.length">
+            <ul>
+              <li class="error" v-for="error in errors">{{ error }}</li>
+            </ul>
+          </p>
+              
+          <v-container>
+            <ul>
+              <li v-for="(todo, index) in todos" class="todo-style">
+                <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
 
-    <p v-show="errors.length">
-    <ul>
-      <li class="error" v-for="error in errors">{{ error }}</li>
-    </ul>
-    </p>
+                <!-- 期限の表示 -->
+                <span :class="{'done':todo.status === 'done'}">
+                  <v-icon small>
+                    mdi-timer-sand
+                  </v-icon>
+                  <span class="deadline-info">【{{ todo.deadLine }}】</span>                    
+                </span>
 
-    <ul>
-      <li v-for="(todo, index) in todos">
-        <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
-        <span class="deadline-info" :class="{'done':todo.status === 'done'}">
-          <span class="deadline-txt" :class="{'done':todo.status === 'done'}">期限</span>
-          【{{ todo.deadLine }}】</span>
-        <select name="status" v-model="todo.status">
-          <option value="isDone">未対応</option>
-          <option value="running">対応中</option>
-          <option value="done">完了</option>
-        </select>
-        <button @click="deleteTodo(index)">削除</button>
-      </li>
-      <li v-show="!this.todos.length">nothing!</li>
-    </ul>
+                <!-- ステータスの表示 -->
+                <select name="status" v-model="todo.status">
+                  <option value="isDone">未対応</option>
+                  <option value="running">対応中</option>
+                  <option value="done">完了</option>
+                </select>
+              
+                <!-- 削除アイコン -->
+                <v-icon color="primary" @click="deleteTodo(index)">
+                  mdi-trash-can-outline
+                </v-icon>
 
+              </li>
+              <li v-show="!this.todos.length">nothing!</li>
+            </ul>        
+          </v-container>  
+
+            <!-- モーダルウィンドウ -->
+          <modal name="todo-modal" :height="300">
+            <div class="card">
+              <div class="card-body">
+                <div class="card-title">
+                  <h2>Todoを追加</h2>
+                </div>
+
+                <div class="card-text">
+                  <v-form>
+                    <v-text-field 
+                      label="タイトル"
+                      autocomplete="off"
+                      v-model="newTodo">
+                    </v-text-field>
+
+                    <v-text-field 
+                      type="date"
+                      label="期日"
+                      v-model="newDeadLine">
+                    </v-text-field>                   
+                  </v-form>
+                </div>
+
+                <div class="card-button">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="3"><v-btn color="primary" @click.prevent="addTodo()">追加</v-btn></v-col>
+                      <v-col cols="3"><v-btn @click="hideModal">キャンセル</v-btn></v-col>
+                    </v-row>
+                  </v-container>      
+                </div>  
+              </div>
+            </div>
+          </modal>
+        </v-main>  
+
+
+        <v-footer>
+            フッター
+        </v-footer>
+
+    </v-app>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.3.10/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-js-modal@1.3.31/dist/index.min.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    
+  </script>
 </body>
-
 </html>
