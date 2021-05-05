@@ -85,11 +85,12 @@ button {
 }
 
 /* 完了の打消し線 */
-#app li> span.done,
-#app li> span> span.done{
+.done {
     text-decoration: line-through;
     color:#ccc;
 }
+
+
 
 /* モーダルウインドウ */
 .card-body {

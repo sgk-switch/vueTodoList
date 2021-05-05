@@ -44,13 +44,60 @@
               <li class="error" v-for="error in errors">{{ error }}</li>
             </ul>
           </p>
-              
+          
           <v-container>
             <ul>
               <li v-for="(todo, index) in todos" class="todo-style">
+
+                <template>
+                  <v-card
+                    class="mx-auto"
+                    max-width="344"
+                    outlined
+                  >
+                  <!-- 
+                    ①ステータスが完了になったら、color="gray"を付ける
+                   -->
+                    <v-card-title>
+                      <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
+                    </v-card-title>
+
+                    <v-card-text>
+                      <span :class="{'done':todo.status === 'done'}">
+                        <span class="deadline-info">【{{ todo.deadLine }}】</span>                    
+                      </span>
+                      <select name="status" v-model="todo.status">
+                        <option value="isDone">未対応</option>
+                        <option value="running">対応中</option>
+                        <option value="done">完了</option>
+                      </select>
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-btn
+                        rounded
+                        color="primary"
+                        @click="deleteTodo(index)"
+                      >
+                        削除
+                      </v-btn>
+                    </v-card-actions>
+
+
+                  </v-card>
+                </template>
+              </li>
+              <li v-show="!this.todos.length">nothing!</li>
+            </ul>        
+          </v-container>
+         
+          <!--  
+          <v-container>
+            <ul>
+              <li v-for="(todo, index) in todos" class="todo-style">
+
                 <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
 
-                <!-- 期限の表示 -->
                 <span :class="{'done':todo.status === 'done'}">
                   <v-icon small>
                     mdi-timer-sand
@@ -58,14 +105,14 @@
                   <span class="deadline-info">【{{ todo.deadLine }}】</span>                    
                 </span>
 
-                <!-- ステータスの表示 -->
+                
                 <select name="status" v-model="todo.status">
                   <option value="isDone">未対応</option>
                   <option value="running">対応中</option>
                   <option value="done">完了</option>
                 </select>
               
-                <!-- 削除アイコン -->
+                
                 <v-icon color="primary" @click="deleteTodo(index)">
                   mdi-trash-can-outline
                 </v-icon>
@@ -73,7 +120,7 @@
               </li>
               <li v-show="!this.todos.length">nothing!</li>
             </ul>        
-          </v-container>  
+          </v-container>  -->
 
             <!-- モーダルウィンドウ -->
           <modal name="todo-modal" :height="300">
@@ -109,9 +156,8 @@
                 </div>  
               </div>
             </div>
-          </modal>
+          </modal>          
         </v-main>  
-
 
         <v-footer>
             フッター
