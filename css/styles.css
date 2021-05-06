@@ -28,7 +28,6 @@ button {
 
 /* エラー表示 */
 .error {
-    color:red;
     font-size: 12px;
     font-weight: normal;
 }

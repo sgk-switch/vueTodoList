@@ -39,56 +39,58 @@
             </h1>
           </v-container> 
 
-          <p v-show="errors.length">
+          <!-- <p v-show="errors.length">
             <ul>
               <li class="error" v-for="error in errors">{{ error }}</li>
             </ul>
-          </p>
-          
+          </p> -->
+
+          <p v-show="!this.todos.length">nothing!</p>
+         
+
           <v-container>
-            <ul>
-              <li v-for="(todo, index) in todos" class="todo-style">
+            <v-row
+              style='height: 150px'
+            >
+              <v-col
+                v-for="(todo, index) in todos" 
+                cols="4"
+              >
+                <v-card
+                  class="mx-auto done-card"
+                  max-width="344"
+                  outlined
+                >
+                <!-- 
+                  ①ステータスが完了になったら、color="gray"を付ける
+                -->
+                  <v-card-title>
+                    <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
+                  </v-card-title>
 
-                <template>
-                  <v-card
-                    class="mx-auto"
-                    max-width="344"
-                    outlined
-                  >
-                  <!-- 
-                    ①ステータスが完了になったら、color="gray"を付ける
-                   -->
-                    <v-card-title>
-                      <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
-                    </v-card-title>
+                  <v-card-text>
+                    <span :class="{'done':todo.status === 'done'}">
+                      <span class="deadline-info">【{{ todo.deadLine }}】</span>                    
+                    </span>
+                    <select name="status" v-model="todo.status">
+                      <option value="isDone">未対応</option>
+                      <option value="running">対応中</option>
+                      <option value="done">完了</option>
+                    </select>
+                  </v-card-text>
 
-                    <v-card-text>
-                      <span :class="{'done':todo.status === 'done'}">
-                        <span class="deadline-info">【{{ todo.deadLine }}】</span>                    
-                      </span>
-                      <select name="status" v-model="todo.status">
-                        <option value="isDone">未対応</option>
-                        <option value="running">対応中</option>
-                        <option value="done">完了</option>
-                      </select>
-                    </v-card-text>
-
-                    <v-card-actions>
-                      <v-btn
-                        rounded
-                        color="primary"
-                        @click="deleteTodo(index)"
-                      >
-                        削除
-                      </v-btn>
-                    </v-card-actions>
-
-
-                  </v-card>
-                </template>
-              </li>
-              <li v-show="!this.todos.length">nothing!</li>
-            </ul>        
+                  <v-card-actions>
+                    <v-btn
+                      rounded
+                      color="primary"
+                      @click="deleteTodo(index)"
+                    >
+                      削除
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>  
+            </v-row>
           </v-container>
          
           <!--  
@@ -123,7 +125,7 @@
           </v-container>  -->
 
             <!-- モーダルウィンドウ -->
-          <modal name="todo-modal" :height="300">
+          <modal name="todo-modal" :height="360">
             <div class="card">
               <div class="card-body">
                 <div class="card-title">
@@ -145,6 +147,12 @@
                     </v-text-field>                   
                   </v-form>
                 </div>
+                  
+                <p v-show="errors.length">
+                  <ul>
+                    <li class="error" v-for="error in errors">{{ error }}</li>
+                  </ul>
+                </p>
 
                 <div class="card-button">
                   <v-container>
@@ -152,16 +160,16 @@
                       <v-col cols="3"><v-btn color="primary" @click.prevent="addTodo()">追加</v-btn></v-col>
                       <v-col cols="3"><v-btn @click="hideModal">キャンセル</v-btn></v-col>
                     </v-row>
-                  </v-container>      
+                  </v-container>
                 </div>  
-              </div>
             </div>
-          </modal>          
-        </v-main>  
+          </div>
+        </modal>              
+      </v-main>  
 
-        <v-footer>
+        <!-- <v-footer>
             フッター
-        </v-footer>
+        </v-footer> -->
 
     </v-app>
   </div>
