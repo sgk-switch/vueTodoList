@@ -12,6 +12,7 @@ new Vue({
           todos:[],
           newTodo: '',
           newDeadLine:'',
+          newImportance:'',
           errors:[]     
         }
     },
@@ -47,11 +48,13 @@ new Vue({
               name: this.newTodo,
               status: 'isDone',
               deadLine:this.getDeadLine(),
+              importance: this.importance
             }
     
             this.todos.push(item);
             this.newTodo = '';
             this.newDeadLine = '';
+            this.newImportance = '';
             this.hideModal();
           }
         },

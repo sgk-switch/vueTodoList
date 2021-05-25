@@ -64,65 +64,59 @@
                 <!-- 
                   ①ステータスが完了になったら、color="gray"を付ける
                 -->
-                  <v-card-title>
+                  <!-- <v-card-title>
                     <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
-                  </v-card-title>
+                  </v-card-title> -->
 
-                  <v-card-text>
-                    <span :class="{'done':todo.status === 'done'}">
-                      <span class="deadline-info">【{{ todo.deadLine }}】</span>                    
-                    </span>
-                    <select name="status" v-model="todo.status">
-                      <option value="isDone">未対応</option>
-                      <option value="running">対応中</option>
-                      <option value="done">完了</option>
-                    </select>
-                  </v-card-text>
+                  <v-list-item three-line>
+                    <v-list-item-content>
+                      <div class="overline mb-4" :class="{'done':todo.status === 'done'}">
+                        <span class="todo-text">期日:{{ todo.deadLine }}</span>                     
+                      </div>
+               
+                      <v-row>
+                        <v-col cols='8'>
+                          <v-list-item-title class="headline mb-1">
+                            <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
+                          </v-list-item-title>
+                        </v-col>
+              
+                        <v-col cols='4'>
+                          <select name="status" v-model="todo.status" class="status-text">
+                            <option value="isDone">未対応</option>
+                            <option value="running">対応中</option>
+                            <option value="done">完了</option>
+                          </select>
+                        </v-col>
+                      </v-row>
 
-                  <v-card-actions>
-                    <v-btn
-                      rounded
-                      color="primary"
-                      @click="deleteTodo(index)"
-                    >
-                      削除
-                    </v-btn>
-                  </v-card-actions>
+                    <v-row>
+                      <v-col cols='8'>
+                        <v-rating
+                          background-color="primary lighten-3"
+                          color="primary"
+                          hover="true"
+                          length="3"
+                          size="24"
+                          v-model="importance"
+                        ></v-rating>
+                      </v-col>
+                      <v-col cols='4'>
+                        <v-card-actions>
+                          <v-btn
+                            rounded
+                            color="primary"
+                            @click="deleteTodo(index)"
+                          >
+                            削除
+                          </v-btn>
+                        </v-card-actions>
+                      </v-col>
+                    </v-row>
                 </v-card>
               </v-col>  
             </v-row>
           </v-container>
-         
-          <!--  
-          <v-container>
-            <ul>
-              <li v-for="(todo, index) in todos" class="todo-style">
-
-                <span :class="{'done':todo.status === 'done'}">{{ todo.name }}</span>
-
-                <span :class="{'done':todo.status === 'done'}">
-                  <v-icon small>
-                    mdi-timer-sand
-                  </v-icon>
-                  <span class="deadline-info">【{{ todo.deadLine }}】</span>                    
-                </span>
-
-                
-                <select name="status" v-model="todo.status">
-                  <option value="isDone">未対応</option>
-                  <option value="running">対応中</option>
-                  <option value="done">完了</option>
-                </select>
-              
-                
-                <v-icon color="primary" @click="deleteTodo(index)">
-                  mdi-trash-can-outline
-                </v-icon>
-
-              </li>
-              <li v-show="!this.todos.length">nothing!</li>
-            </ul>        
-          </v-container>  -->
 
             <!-- モーダルウィンドウ -->
           <modal name="todo-modal" :height="360">

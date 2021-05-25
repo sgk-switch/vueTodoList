@@ -53,8 +53,8 @@ button {
     font-weight: bold;
 }
 
-/*期限（deadline）の表示 */
-.deadline-info {
+/*期限（deadline）と重要度の表示 */
+.todo-text {
     font-size: 12px;
     color: rgb(44, 43, 43);
     font-weight: normal;
@@ -89,6 +89,11 @@ button {
     color:#ccc;
 }
 
+/* ステータスの表示 */
+.status-text {
+    font-size: 14px;
+    font-weight: normal;
+}
 
 
 /* モーダルウインドウ */
